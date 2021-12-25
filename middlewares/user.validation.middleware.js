@@ -1,7 +1,11 @@
 const { user } = require('../models/user');
 const {
   isWithoutIdField,
-  isMinOneField } = require('./helper-validation/helperValidation');
+  isMinOneField,
+  isAllFields,
+  isOnlyModelsField,
+  isNotEmpty
+} = require('./helper-validation/userHelperValidation');
 
 const createUserValid = (req, res, next) => {
   // TODO: Implement validatior for user entity during creation
@@ -9,6 +13,9 @@ const createUserValid = (req, res, next) => {
   if ( req && req.body ) {
     try {
       isWithoutIdField(req.body);
+      isAllFields(req.body, user);
+      isOnlyModelsField(req.body, user);
+      isNotEmpty(req.body);
       next();
     } catch (err) {
       res.status(400).json({ error: true, message: err.message })
@@ -21,12 +28,10 @@ const createUserValid = (req, res, next) => {
 const updateUserValid = (req, res, next) => {
   // TODO: Implement validatior for user entity during update
   // if get error, stop middleware
-  console.log('in updateUserValid');
   if(req && req.body && req.params.id) {
-    console.log('in if');
     try {
-      console.log('in try');
       isMinOneField(req.body);
+      isNotEmpty(req.body);
       next();
     } catch (err) {
       res.status(400).json({ error: true, message: err.message })
