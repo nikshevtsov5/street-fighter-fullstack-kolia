@@ -2,10 +2,10 @@ const { user } = require('../models/user');
 const {
   isWithoutIdField,
   isMinOneField,
-  isAllFields,
   isOnlyModelsField,
   isNotEmpty
-} = require('./helper-validation/userHelperValidation');
+} = require('./helper-validation/helperValidation');
+const { isAllFields } = require('./helper-validation/userHelperValidation');
 
 const createUserValid = (req, res, next) => {
   // TODO: Implement validatior for user entity during creation

@@ -1,6 +1,6 @@
 const isAllFields = (body, model) => {
-  // only id is not require
-  const { id, ...requiredFields } = model;
+  // only id and health is not require
+  const { id, health, ...requiredFields } = model;
   Object.keys(requiredFields).forEach(item => {
     if(body.hasOwnProperty(item)) {
       return true;
