@@ -2,8 +2,12 @@ const { Router } = require('express');
 const UserService = require('../services/userService');
 const { createUserValid, updateUserValid } = require('../middlewares/user.validation.middleware');
 const { responseMiddleware } = require('../middlewares/response.middleware');
-const { getAllUsersMiddleware,
-  getUserMiddleware } = require('../middlewares/user.error.middleware');
+const {
+  getAllUsersMiddleware,
+  getUserMiddleware,
+  postNewUserMiddleware,
+  putUserMiddleware,
+  deleteUserMiddleware } = require('../middlewares/user.error.middleware');
 
 const router = Router();
 
@@ -21,26 +25,79 @@ router.get('/', (req, res, next) => {
 
 router.get('/:id', (req, res, next) => {
   try {
-    const id = req.param.id;
-    const user = UserService.search(id);
+    const id = req.params.id;
+    const user = UserService.search({'id': id});
     res.data = user;
   } catch (err) {
-    console.log('catched error', err);
     res.err = err
   } finally {
     next();
   }
 }, getUserMiddleware, responseMiddleware);
 
-// router.post('/', (req, res, next) => {
-//   try {
-//     const data = req.body;
-//     const newUser = UserService.create(data);
-//   } catch (err) {
-//     res.err = err;
-//   } finally {
-//     next();
-//   }
-// })
+router.post('/', createUserValid, (req, res, next) => {
+  try {
+    const data = req.body;
+    const newUser = UserService.createNew(data);
+    res.data = newUser;
+  } catch (err) {
+    res.err = err;
+  } finally {
+    next();
+  }
+}, postNewUserMiddleware, responseMiddleware);
+
+router.put('/:id', updateUserValid, (req, res, next) => {
+  try {
+    const id = req.params.id;
+    const data = req.body;
+    const updateDUser = UserService.updateOne(id, data);
+    res.data = updateDUser;
+  } catch (err) {
+    res.err = err;
+  } finally {
+    next()
+  }
+}, putUserMiddleware, responseMiddleware);
+
+router.delete('/:id', (req, res, next) => {
+  try {
+    const id = req.params.id;
+    const deletedUser = UserService.deleteOne(id);
+    res.data = deletedUser;
+  } catch (err) {
+    res.err = err;
+  } finally {
+    next()
+  }
+}, deleteUserMiddleware, responseMiddleware)
 
 module.exports = router;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//

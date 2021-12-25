@@ -1,10 +1,10 @@
 const responseMiddleware = (req, res, next) => {
   // TODO: Implement middleware that returns result of the query
-  console.log('res.err =>', res.err);
-  if(!res.err) {
+
+  // in res something must be true. It can be res.data OR res.err
+  if(res.data) {
     console.log('in responseMiddleware if block');
-    const data = res.data;
-    res.status(200).json(data)
+    res.status(200).json(res.data)
   } else {
     console.log('in responseMiddleware else block');
     // if errors ocured in previous middleware take that
