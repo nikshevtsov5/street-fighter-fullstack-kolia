@@ -11,6 +11,14 @@ class UserService {
         }
         return item;
     }
+
+    getAllUsers() {
+      const items = UserRepository.getAll();
+      if(!items || items.length == 0) {
+        return null;
+      }
+      return items;
+    }
 }
 
 module.exports = new UserService();
